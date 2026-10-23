@@ -1,6 +1,8 @@
+
 package graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Graph {
@@ -29,7 +31,7 @@ public class Graph {
 
         this.n = n;
         this.directed = directed;
-        this.adjacencyList = new ArrayList<>();
+        this.adjacencyList = new ArrayList<>(n);
         this.edges = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
@@ -42,6 +44,7 @@ public class Graph {
         checkVertex(to);
 
         Edge edge = new Edge(from, to, weight);
+
         edges.add(edge);
         adjacencyList.get(from).add(edge);
 
@@ -54,7 +57,9 @@ public class Graph {
 
     private void checkVertex(int vertex) {
         if (vertex < 0 || vertex >= n) {
-            throw new IllegalArgumentException("Invalid vertex: " + vertex);
+            throw new IllegalArgumentException(
+                    "Invalid vertex: " + vertex
+            );
         }
     }
 
@@ -72,10 +77,12 @@ public class Graph {
 
     public List<Edge> neighbors(int vertex) {
         checkVertex(vertex);
-        return List.copyOf(adjacencyList.get(vertex));
+        return Collections.unmodifiableList(
+                adjacencyList.get(vertex)
+        );
     }
 
     public List<Edge> getEdges() {
-        return List.copyOf(edges);
+        return Collections.unmodifiableList(edges);
     }
 }
